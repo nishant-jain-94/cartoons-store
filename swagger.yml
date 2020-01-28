@@ -1,0 +1,156 @@
+swagger: "2.0"
+info:
+  description: "Cartoon Server to retrieve and add new details about Cartoon."
+  version: "1.0.0"
+  title: "Cartoon Store"
+  contact:
+    email: nishantkumarajain@gmail.com
+host: localhost:8080
+basePath: /api/v1
+tags:
+  - name: Cartoons
+    description: Everything about Cartoons.
+schemes:
+  - http
+  - https
+definitions:
+  CartoonRequestObject:
+    type: object
+    properties:
+      name:
+        type: string
+      import_url:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+  CartoonResponseObject:
+    type: object
+    properties:
+      name:
+        type: string
+      url:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+paths:
+  /cartoons:
+    post:
+      tags:
+        - Cartoons
+      summary: Adds a new Cartoon to the Cartoon Store.
+      description: Adds a new Cartoon to the Cartoon Store by importing it from the external url.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: cartoon
+          description: Cartoon Object that needs to be added to the Cartoon Store.
+          required: true
+          schema:
+            $ref: "#/definitions/CartoonRequestObject"
+      responses:
+        '201':
+          description: Cartoon Created
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+    get:
+      tags:
+        - Cartoons
+      summary: Gets a list of Cartoons from the Cartoon Store.
+      description: Gets a list of Cartoon from the Cartoon Store.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Returns a list of cartoons from the Cartoon Store
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CartoonResponseObject'
+  /cartoons/{cartoonId}:
+    get:
+      tags:
+        - Cartoons
+      summary: Gets the Cartoon which matches the CartoonId
+      description: Gets a Cartoon which matches the CartoonId in the Store.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          type: string
+          name: cartoonId
+          required: true
+          description: Refers to the Id of the Cartoon to retrieve it from the Cartoon Store.
+      responses:
+        '200':
+          description: Returns cartoons matching the cartoon Id from the Cartoon Store
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CartoonResponseObject'
+        '404':
+          description: No cartoon with this cartoonId exists
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Cartoons
+      summary: Updates the Cartoon which matches the CartoonId
+      description: Gets a Cartoon which matches the CartoonId in the Store.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          type: string
+          required: true
+          name: cartoonId
+          description: Refers to the Id of the Cartoon which requires update.
+        - in: body
+          required: true
+          name: cartoon
+          description: Updated Cartoon Object
+          schema:
+            $ref: "#/definitions/CartoonResponseObject"
+      responses:
+        '201':
+          description: Successful Update
+        '404':
+          description: The Cartoon which needs to be updated couldn't be found
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Cartoons
+      summary: Deletes the Cartoons which matches the CartoonId
+      description: Deletes a Cartoon from the Cartoon Store which matches the CartoonId.
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          type: string
+          required: true
+          name: cartoonId
+          description: Refers to the Id of the Cartoon to retrieve it from the Cartoon Store.
+      responses:
+        '201':
+          description: Successfully Deleted
+        '404':
+          description: Cartoon with this Id doesn't exists
+        '500':
+          description: Internal Server Error
