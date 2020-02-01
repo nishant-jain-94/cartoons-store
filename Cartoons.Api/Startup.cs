@@ -35,12 +35,18 @@ namespace Cartoons.Api
             // the Dependency Injection (DI) container. 
             // For example, a CartoonStoreDBSettings object's ConnectionString property is populated with the 
             // CartoonStoreDBSettings:ConnectionString property in appsettings.json.
+            services.Configure<DraftCartoonStoreDBSettings>(Configuration.GetSection(nameof(DraftCartoonStoreDBSettings)));
             services.Configure<CartoonStoreDBSettings>(Configuration.GetSection(nameof(CartoonStoreDBSettings)));
-            
+
             // The ICartoonStoreDBSettings interface is registered in DI with a singleton service lifetime.
             //  When injected, the interface instance resolves to a ICartoonStoreDBSettings object.
             services.AddSingleton<ICartoonStoreDBSettings>(sp => sp.GetRequiredService<IOptions<CartoonStoreDBSettings>>().Value);
             services.AddSingleton<ICartoonStoreDBService, CartoonStoreDBService>();
+
+            // The ICartoonStoreDBSettings interface is registered in DI with a singleton service lifetime.
+            //  When injected, the interface instance resolves to a ICartoonStoreDBSettings object.
+            services.AddSingleton<IDraftCartoonStoreDBSettings>(sp => sp.GetRequiredService<IOptions<DraftCartoonStoreDBSettings>>().Value);
+            services.AddSingleton<IDraftCartoonStoreDBService, DraftCartoonStoreDBService>();
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(c => {
@@ -67,13 +73,6 @@ namespace Cartoons.Api
             });
 
             app.UseMvc();
-
-            // app.UseRouting();
-            // app.UseAuthorization();
-            // app.UseEndpoints(endpoints =>
-            // {
-            //     endpoints.MapControllers();
-            // });
         }
     }
 }

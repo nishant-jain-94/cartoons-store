@@ -8,8 +8,5 @@ namespace Cartoons.Services
     {
         Task<IEnumerable<Cartoon>> GetCartoonsAsync();
         Task<Cartoon> GetCartoonAsync(string id);
-        Task<Cartoon> AddCartoonAsync(Cartoon cartoon);
-        Task UpdateCartoonAsync(string id, Cartoon cartoon);
-        Task DeleteCartoonAsync(string id);
     }
 }

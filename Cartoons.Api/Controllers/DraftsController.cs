@@ -7,20 +7,27 @@ using Cartoons.Services;
 namespace Cartoons.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class CartoonsController: ControllerBase
+    [Route("api/cartoons/draft")]
+    public class DraftsController: ControllerBase
     {
-        private readonly ICartoonStoreDBService _cartoonStoreDBService;
-        public CartoonsController(ICartoonStoreDBService cartoonStoreDBService)
+        private readonly IDraftCartoonStoreDBService _cartoonStoreDBService;
+        public DraftsController(IDraftCartoonStoreDBService cartoonStoreDBService)
         {
             _cartoonStoreDBService = cartoonStoreDBService;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Cartoon>> GetCartoons()
+        public async Task<IEnumerable<Cartoon>> GetCartoonsAsync()
         {
             var cartoons = await _cartoonStoreDBService.GetCartoonsAsync();
             return cartoons;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Cartoon> GetCartoonAsync(string id)
+        {
+            var cartoon = await _cartoonStoreDBService.GetCartoonAsync(id);
+            return cartoon;
         }
 
         [HttpPost]
